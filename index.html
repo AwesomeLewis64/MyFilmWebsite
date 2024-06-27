@@ -26,6 +26,7 @@
             top: 0;
             padding: 1rem 5%;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         nav {
             display: flex;
@@ -62,6 +63,7 @@
             color: white;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
         .hero::before {
             content: '';
@@ -110,11 +112,6 @@
             margin-bottom: 2rem;
             text-align: center;
         }
-        .about {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
         .reviews-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -153,6 +150,13 @@
             text-align: center;
             padding: 2rem;
         }
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .fade-in.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -162,7 +166,6 @@
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#reviews">Reviews</a></li>
-                <li><a href="#about">About</a></li>
             </ul>
         </nav>
     </header>
@@ -171,19 +174,12 @@
         <section id="home" class="hero">
             <div class="hero-content">
                 <h1>Welcome to CineReview</h1>
-                <p>Dive into the world of cinema with in-depth reviews and analysis</p>
+                <p>Your ultimate hub for film critiques. Dive into the world of cinema with in-depth reviews and analysis by our team of passionate film critics.</p>
                 <a href="#reviews" class="btn">Explore Reviews</a>
             </div>
         </section>
 
-        <section id="about" class="section">
-            <h2>About CineReview</h2>
-            <div class="about">
-                <p>Welcome to CineReview, your ultimate hub for film critiques. Our team of passionate film critics provides expert analysis on the latest releases, in-depth reviews of classic movies, and coverage of major film awards and festivals. Whether you're a casual moviegoer or a dedicated cinephile, CineReview is your go-to source for all things cinema.</p>
-            </div>
-        </section>
-
-        <section id="reviews" class="section">
+        <section id="reviews" class="section fade-in">
             <h2>Latest Reviews</h2>
             <div class="reviews-grid">
                 <div class="review-card">
@@ -223,6 +219,26 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // Add fade-in effect on scroll
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.5,
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('show');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
         });
     </script>
 </body>
